@@ -1,6 +1,5 @@
 package dev.micalobia.full_slabs.config;
 
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import dev.micalobia.full_slabs.util.Utility;
@@ -16,11 +15,31 @@ import java.util.stream.Collectors;
 
 @Config(name = "full_slabs")
 public class ModConfig implements ConfigData {
-	Set<String> tiltableSlabs = ImmutableSet.of("minecraft:smooth_stone_slab");
+	Set<String> tiltableSlabs = ImmutableSet.of("minecraft:smooth_stone_slab",
+			"mo_glass:glass_slab",
+			"mo_glass:white_stained_glass_slab",
+			"mo_glass:orange_stained_glass_slab",
+			"mo_glass:magenta_stained_glass_slab",
+			"mo_glass:light_blue_stained_glass_slab",
+			"mo_glass:yellow_stained_glass_slab",
+			"mo_glass:lime_stained_glass_slab",
+			"mo_glass:pink_stained_glass_slab",
+			"mo_glass:gray_stained_glass_slab",
+			"mo_glass:light_gray_stained_glass_slab",
+			"mo_glass:cyan_stained_glass_slab",
+			"mo_glass:purple_stained_glass_slab",
+			"mo_glass:blue_stained_glass_slab",
+			"mo_glass:brown_stained_glass_slab",
+			"mo_glass:green_stained_glass_slab",
+			"mo_glass:red_stained_glass_slab",
+			"mo_glass:black_stained_glass_slab",
+			"mo_glass:tinted_glass_slab");
 	Map<String, SlabExtraConfig> slabExtras = ImmutableMap.<String, SlabExtraConfig>builder()
-			.put("minecraft:wall_torch", new SlabExtraConfig(null, null, "facing=south", "facing=north", "facing=west", "facing=east"))
+			.put("minecraft:wall_torch",
+					new SlabExtraConfig(null, null, "facing=south", "facing=north", "facing=west", "facing=east"))
 			.put("minecraft:torch", new SlabExtraConfig("", null, null, null, null, null))
-			.put("minecraft:soul_wall_torch", new SlabExtraConfig(null, null, "facing=south", "facing=north", "facing=west", "facing=east"))
+			.put("minecraft:soul_wall_torch",
+					new SlabExtraConfig(null, null, "facing=south", "facing=north", "facing=west", "facing=east"))
 			.put("minecraft:soul_torch", new SlabExtraConfig("", null, null, null, null, null))
 			.put("minecraft:lantern", new SlabExtraConfig("hanging=false", "hanging=true", null, null, null, null))
 			.put("minecraft:soul_lantern", new SlabExtraConfig("hanging=false", "hanging=true", null, null, null, null))
@@ -68,8 +87,7 @@ public class ModConfig implements ConfigData {
 		public SlabExtraConfig(
 				@Nullable String bottom, @Nullable String top,
 				@Nullable String north, @Nullable String south,
-				@Nullable String east, @Nullable String west
-		) {
+				@Nullable String east, @Nullable String west) {
 			this.bottom = bottom;
 			this.top = top;
 			this.north = north;
