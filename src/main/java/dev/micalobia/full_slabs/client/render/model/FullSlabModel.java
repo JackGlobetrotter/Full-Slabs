@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 import java.util.function.Supplier;
 
 public class FullSlabModel extends BasicModel {
