@@ -10,7 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.BlockRenderView;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 import java.util.function.Supplier;
 
 public class ExtraSlabModel extends BasicModel {
