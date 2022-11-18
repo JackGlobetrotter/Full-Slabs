@@ -15,10 +15,12 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
@@ -28,27 +30,56 @@ import net.minecraft.world.BlockView;
 import java.util.Objects;
 
 public class OutlineRenderer {
+
 	private static boolean renderSlabOutline(WorldRenderContext renderContext, BlockOutlineContext outlineContext) {
-		if(outlineContext.blockState().getBlock() instanceof SlabBlock) {
+		if (outlineContext.blockState().getBlock() instanceof SlabBlock) {
 			BlockState state = outlineContext.blockState();
 			BlockPos pos = outlineContext.blockPos();
 			Vec3d cam = renderContext.camera().getPos();
-			WorldRendererAccessor.callDrawShapeOutline(
-					renderContext.matrixStack(),
-					Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES),
-					getRenderedSlabOutlineShape(state, pos),
-					pos.getX() - cam.getX(),
-					pos.getY() - cam.getY(),
-					pos.getZ() - cam.getZ(),
-					0f, 0f, 0f, 0.4f
-			);
+
+			MatrixStack.Entry entry = renderContext.matrixStack().peek();
+			var normalmatrix = entry.getNormalMatrix();
+			var shape = Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES);
+			var matrix = entry.getPositionMatrix();
+
+			getRenderedSlabOutlineShape(state, pos).forEachEdge((startX, startY, startZ, endX, endY, endZ) -> { 
+				float nx = (float) (endX - startX);
+				float ny = (float) (endY - startY);
+				float nz = (float) (endZ - startZ);
+				shape
+						.vertex(matrix, (float) (startX + pos.getX() - cam.getX()),
+								(float) (startY + pos.getY() - cam.getY()),
+								(float) (startZ + pos.getZ() - cam.getZ()))
+						.color(0f, 0f, 0f, 0.4f)
+						.normal(normalmatrix, nx, ny, nz)
+						.next();
+				shape
+						.vertex(matrix, (float) (endX + pos.getX() - cam.getX()),
+								(float) (endY + pos.getY() - cam.getY()),
+								(float) (endZ + pos.getZ() - cam.getZ()))
+						.color(0f, 0f, 0f, 0.4f)
+						.normal(normalmatrix, nx, ny, nz)
+						.next();
+			});
+
+			/*
+			 * WorldRendererAccessor.callDrawShapeOutline(
+			 * renderContext.matrixStack(),
+			 * Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES
+			 * ),
+			 * getRenderedSlabOutlineShape(state, pos),
+			 * pos.getX() - cam.getX(),
+			 * pos.getY() - cam.getY(),
+			 * pos.getZ() - cam.getZ(),
+			 * 1.0F, 1.0F, 1.0F, 0.4F); //lines are always red ???
+			 */
 			return false;
 		}
 		return true;
 	}
 
 	private static boolean renderFullSlabOutline(WorldRenderContext renderContext, BlockOutlineContext outlineContext) {
-		if(outlineContext.blockState().isOf(FullSlabsMod.FULL_SLAB_BLOCK)) {
+		if (outlineContext.blockState().isOf(FullSlabsMod.FULL_SLAB_BLOCK)) {
 			BlockState state = outlineContext.blockState();
 			BlockPos pos = outlineContext.blockPos();
 			Vec3d cam = renderContext.camera().getPos();
@@ -59,15 +90,15 @@ public class OutlineRenderer {
 					pos.getX() - cam.getX(),
 					pos.getY() - cam.getY(),
 					pos.getZ() - cam.getZ(),
-					0f, 0f, 0f, 0.4f
-			);
+					0f, 0f, 0f, 0.4f);
 			return false;
 		}
 		return true;
 	}
 
-	private static boolean renderExtraSlabOutline(WorldRenderContext renderContext, BlockOutlineContext outlineContext) {
-		if(outlineContext.blockState().isOf(FullSlabsMod.EXTRA_SLAB_BLOCK)) {
+	private static boolean renderExtraSlabOutline(WorldRenderContext renderContext,
+			BlockOutlineContext outlineContext) {
+		if (outlineContext.blockState().isOf(FullSlabsMod.EXTRA_SLAB_BLOCK)) {
 			BlockState state = outlineContext.blockState();
 			BlockPos pos = outlineContext.blockPos();
 			BlockView world = renderContext.world();
@@ -79,8 +110,7 @@ public class OutlineRenderer {
 					pos.getX() - cam.getX(),
 					pos.getY() - cam.getY(),
 					pos.getZ() - cam.getZ(),
-					0f, 0f, 0f, 0.4f
-			);
+					0f, 0f, 0f, 0.4f);
 			return false;
 		}
 		return true;
@@ -88,31 +118,38 @@ public class OutlineRenderer {
 
 	private static VoxelShape getRenderedFullSlabOutlineShape(BlockState state, BlockPos pos) {
 		HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-		if(hitResult == null) return VoxelShapes.fullCube();
-		return SlabBlockUtility.getShape(SlabBlockUtility.getDirection(state.get(FullSlabBlock.AXIS), hitResult.getPos(), pos));
+		if (hitResult == null)
+			return VoxelShapes.fullCube();
+		return SlabBlockUtility
+				.getShape(SlabBlockUtility.getDirection(state.get(FullSlabBlock.AXIS), hitResult.getPos(), pos));
 	}
 
 	private static VoxelShape getRenderedSlabOutlineShape(BlockState state, BlockPos pos) {
 		SlabType type = state.get(SlabBlock.TYPE);
 		Direction direction;
-		if(type == SlabType.DOUBLE) {
+		if (type == SlabType.DOUBLE) {
 			HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-			if(hitResult == null) return VoxelShapes.fullCube();
+			if (hitResult == null)
+				return VoxelShapes.fullCube();
 			direction = SlabBlockUtility.getDirection(state.get(Properties.AXIS), hitResult.getPos(), pos);
-		} else direction = SlabBlockUtility.getDirection(type, state.get(Properties.AXIS));
+		} else
+			direction = SlabBlockUtility.getDirection(type, state.get(Properties.AXIS));
 		return SlabBlockUtility.getShape(direction);
 	}
 
 	private static VoxelShape getRenderedExtraSlabOutlineShape(BlockState state, BlockPos pos, BlockView world) {
 		HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-		if(hitResult == null) return VoxelShapes.fullCube();
+		if (hitResult == null)
+			return VoxelShapes.fullCube();
 		SlabType type = state.get(ExtraSlabBlock.TYPE);
 		Axis axis = state.get(ExtraSlabBlock.AXIS);
 		Direction slabDir = SlabBlockUtility.getDirection(type, axis);
 		Direction hitDir = SlabBlockUtility.getDirection(axis, hitResult.getPos(), pos, type);
-		if(slabDir == hitDir) return SlabBlockUtility.getShape(slabDir);
+		if (slabDir == hitDir)
+			return SlabBlockUtility.getShape(slabDir);
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
-		if(entity == null) return SlabBlockUtility.getShape(hitDir);
+		if (entity == null)
+			return SlabBlockUtility.getShape(hitDir);
 		return entity.getExtraOutlineShape(world, pos, ShapeContext.absent());
 	}
 
