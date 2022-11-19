@@ -5,7 +5,6 @@ import dev.micalobia.full_slabs.block.ExtraSlabBlock;
 import dev.micalobia.full_slabs.block.FullSlabBlock;
 import dev.micalobia.full_slabs.block.SlabBlockUtility;
 import dev.micalobia.full_slabs.block.entity.ExtraSlabBlockEntity;
-import dev.micalobia.full_slabs.mixin.client.render.WorldRendererAccessor;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext.BlockOutlineContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -20,7 +19,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
@@ -33,46 +31,10 @@ public class OutlineRenderer {
 
 	private static boolean renderSlabOutline(WorldRenderContext renderContext, BlockOutlineContext outlineContext) {
 		if (outlineContext.blockState().getBlock() instanceof SlabBlock) {
-			BlockState state = outlineContext.blockState();
-			BlockPos pos = outlineContext.blockPos();
-			Vec3d cam = renderContext.camera().getPos();
 
-			MatrixStack.Entry entry = renderContext.matrixStack().peek();
-			var normalmatrix = entry.getNormalMatrix();
-			var shape = Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES);
-			var matrix = entry.getPositionMatrix();
+			renderSlabOutlineShape(renderContext, outlineContext.blockState(), outlineContext.blockPos(),
+					renderContext.world(), renderContext.camera().getPos(), FullSlabType.Slab);
 
-			getRenderedSlabOutlineShape(state, pos).forEachEdge((startX, startY, startZ, endX, endY, endZ) -> { 
-				float nx = (float) (endX - startX);
-				float ny = (float) (endY - startY);
-				float nz = (float) (endZ - startZ);
-				shape
-						.vertex(matrix, (float) (startX + pos.getX() - cam.getX()),
-								(float) (startY + pos.getY() - cam.getY()),
-								(float) (startZ + pos.getZ() - cam.getZ()))
-						.color(0f, 0f, 0f, 0.4f)
-						.normal(normalmatrix, nx, ny, nz)
-						.next();
-				shape
-						.vertex(matrix, (float) (endX + pos.getX() - cam.getX()),
-								(float) (endY + pos.getY() - cam.getY()),
-								(float) (endZ + pos.getZ() - cam.getZ()))
-						.color(0f, 0f, 0f, 0.4f)
-						.normal(normalmatrix, nx, ny, nz)
-						.next();
-			});
-
-			/*
-			 * WorldRendererAccessor.callDrawShapeOutline(
-			 * renderContext.matrixStack(),
-			 * Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES
-			 * ),
-			 * getRenderedSlabOutlineShape(state, pos),
-			 * pos.getX() - cam.getX(),
-			 * pos.getY() - cam.getY(),
-			 * pos.getZ() - cam.getZ(),
-			 * 1.0F, 1.0F, 1.0F, 0.4F); //lines are always red ???
-			 */
 			return false;
 		}
 		return true;
@@ -80,17 +42,10 @@ public class OutlineRenderer {
 
 	private static boolean renderFullSlabOutline(WorldRenderContext renderContext, BlockOutlineContext outlineContext) {
 		if (outlineContext.blockState().isOf(FullSlabsMod.FULL_SLAB_BLOCK)) {
-			BlockState state = outlineContext.blockState();
-			BlockPos pos = outlineContext.blockPos();
-			Vec3d cam = renderContext.camera().getPos();
-			WorldRendererAccessor.callDrawShapeOutline(
-					renderContext.matrixStack(),
-					Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES),
-					getRenderedFullSlabOutlineShape(state, pos),
-					pos.getX() - cam.getX(),
-					pos.getY() - cam.getY(),
-					pos.getZ() - cam.getZ(),
-					0f, 0f, 0f, 0.4f);
+
+			renderSlabOutlineShape(renderContext, outlineContext.blockState(), outlineContext.blockPos(),
+					renderContext.world(), renderContext.camera().getPos(), FullSlabType.FullSlab);
+
 			return false;
 		}
 		return true;
@@ -99,21 +54,51 @@ public class OutlineRenderer {
 	private static boolean renderExtraSlabOutline(WorldRenderContext renderContext,
 			BlockOutlineContext outlineContext) {
 		if (outlineContext.blockState().isOf(FullSlabsMod.EXTRA_SLAB_BLOCK)) {
-			BlockState state = outlineContext.blockState();
-			BlockPos pos = outlineContext.blockPos();
-			BlockView world = renderContext.world();
-			Vec3d cam = renderContext.camera().getPos();
-			WorldRendererAccessor.callDrawShapeOutline(
-					renderContext.matrixStack(),
-					Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES),
-					getRenderedExtraSlabOutlineShape(state, pos, world),
-					pos.getX() - cam.getX(),
-					pos.getY() - cam.getY(),
-					pos.getZ() - cam.getZ(),
-					0f, 0f, 0f, 0.4f);
+
+			renderSlabOutlineShape(renderContext, outlineContext.blockState(), outlineContext.blockPos(),
+					renderContext.world(), renderContext.camera().getPos(), FullSlabType.ExtraSlab);
+
 			return false;
 		}
 		return true;
+	}
+
+	private enum FullSlabType {
+		Slab, FullSlab, ExtraSlab
+	}
+
+	private static void renderSlabOutlineShape(WorldRenderContext renderContext, BlockState state, BlockPos pos,
+			BlockView world, Vec3d cam, FullSlabType type) {
+
+		MatrixStack.Entry entry = renderContext.matrixStack().peek();
+		var normalmatrix = entry.getNormalMatrix();
+		var shape = Objects.requireNonNull(renderContext.consumers()).getBuffer(RenderLayer.LINES);
+		var matrix = entry.getPositionMatrix();
+
+		VoxelShape shapeToRender = type == FullSlabType.Slab ? getRenderedSlabOutlineShape(state, pos)
+				: type == FullSlabType.FullSlab ? getRenderedFullSlabOutlineShape(state, pos)
+						: getRenderedExtraSlabOutlineShape(state, pos, world);
+
+		shapeToRender
+				.forEachEdge((startX, startY, startZ, endX, endY, endZ) -> {
+					float nx = (float) (endX - startX);
+					float ny = (float) (endY - startY);
+					float nz = (float) (endZ - startZ);
+					shape
+							.vertex(matrix, (float) (startX + pos.getX() - cam.getX()),
+									(float) (startY + pos.getY() - cam.getY()),
+									(float) (startZ + pos.getZ() - cam.getZ()))
+							.color(0f, 0f, 0f, 0.4f)
+							.normal(normalmatrix, nx, ny, nz)
+							.next();
+					shape
+							.vertex(matrix, (float) (endX + pos.getX() - cam.getX()),
+									(float) (endY + pos.getY() - cam.getY()),
+									(float) (endZ + pos.getZ() - cam.getZ()))
+							.color(0f, 0f, 0f, 0.4f)
+							.normal(normalmatrix, nx, ny, nz)
+							.next();
+				});
 	}
 
 	private static VoxelShape getRenderedFullSlabOutlineShape(BlockState state, BlockPos pos) {
@@ -145,12 +130,13 @@ public class OutlineRenderer {
 		Axis axis = state.get(ExtraSlabBlock.AXIS);
 		Direction slabDir = SlabBlockUtility.getDirection(type, axis);
 		Direction hitDir = SlabBlockUtility.getDirection(axis, hitResult.getPos(), pos, type);
+
 		if (slabDir == hitDir)
 			return SlabBlockUtility.getShape(slabDir);
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
 		if (entity == null)
 			return SlabBlockUtility.getShape(hitDir);
-		return entity.getExtraOutlineShape(world, pos, ShapeContext.absent());
+		return entity.getExtraOutlineShape(world, pos, ShapeContext.absent()); // return VoxelShapes.fullCube(); ????
 	}
 
 	public static void init() {
