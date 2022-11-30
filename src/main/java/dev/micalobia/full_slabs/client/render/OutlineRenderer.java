@@ -136,7 +136,7 @@ public class OutlineRenderer {
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
 		if (entity == null)
 			return SlabBlockUtility.getShape(hitDir);
-		return entity.getExtraOutlineShape(world, pos, ShapeContext.absent()); // return VoxelShapes.fullCube(); ????
+		return entity.getExtraOutlineShape(world, pos, ShapeContext.absent()); // return VoxelShapes.fullCube(); ???? Maybe render dotted outline ? 
 	}
 
 	public static void init() {

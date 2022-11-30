@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 
 @Config(name = "full_slabs")
 public class ModConfig implements ConfigData {
-	Set<String> tiltableSlabs = ImmutableSet.of("minecraft:smooth_stone_slab",
+	Set<String> tiltableSlabs = ImmutableSet.of(
+			"minecraft:smooth_stone_slab",
 			"mo_glass:glass_slab",
 			"mo_glass:white_stained_glass_slab",
 			"mo_glass:orange_stained_glass_slab",

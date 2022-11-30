@@ -45,7 +45,8 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 
 	public ExtraSlabBlock(Settings settings) {
 		super(settings);
-		setDefaultState(getDefaultState().with(TYPE, SlabType.BOTTOM).with(AXIS, Axis.Y).with(WATERLOGGED, false).with(LIGHT, 0));
+		setDefaultState(getDefaultState().with(TYPE, SlabType.BOTTOM).with(AXIS, Axis.Y).with(WATERLOGGED, false)
+				.with(LIGHT, 0));
 	}
 
 	public static Direction getDirection(BlockState state) {
@@ -63,8 +64,9 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if(state.get(WATERLOGGED))
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState,
+			WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+		if (state.get(WATERLOGGED))
 			world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
@@ -82,15 +84,19 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
-		if(entity == null) return VoxelShapes.empty();
-		return VoxelShapes.union(entity.getBaseOutlineShape(world, pos, context), entity.getExtraOutlineShape(world, pos, context));
+		if (entity == null)
+			return VoxelShapes.empty();
+		return VoxelShapes.union(entity.getBaseOutlineShape(world, pos, context),
+				entity.getExtraOutlineShape(world, pos, context));
 	}
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
-		if(entity == null) return VoxelShapes.empty();
-		return VoxelShapes.union(entity.getBaseCollisionShape(world, pos, context), entity.getExtraCollisionShape(world, pos, context));
+		if (entity == null)
+			return VoxelShapes.empty();
+		return VoxelShapes.union(entity.getBaseCollisionShape(world, pos, context),
+				entity.getExtraCollisionShape(world, pos, context));
 	}
 
 	@Override
@@ -105,11 +111,14 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 	@Override
 	public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
-		if(entity == null) return ItemStack.EMPTY;
+		if (entity == null)
+			return ItemStack.EMPTY;
 		HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
 		BlockState pickState;
-		if(hitResult == null || hitResult.getType() != Type.BLOCK) pickState = entity.getBaseState();
-		else pickState = entity.getState(hitResult.getPos());
+		if (hitResult == null || hitResult.getType() != Type.BLOCK)
+			pickState = entity.getBaseState();
+		else
+			pickState = entity.getState(hitResult.getPos());
 		return pickState.getBlock().getPickStack(world, pos, pickState);
 	}
 
@@ -122,7 +131,8 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 	public boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
 		Objects.requireNonNull(entity);
-		if(entity.waterloggable()) return Waterloggable.super.canFillWithFluid(world, pos, state, fluid);
+		if (entity.waterloggable())
+			return Waterloggable.super.canFillWithFluid(world, pos, state, fluid);
 		return false;
 	}
 
@@ -130,7 +140,8 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 	public boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
 		ExtraSlabBlockEntity entity = (ExtraSlabBlockEntity) world.getBlockEntity(pos);
 		Objects.requireNonNull(entity);
-		if(entity.waterloggable()) return Waterloggable.super.tryFillWithFluid(world, pos, state, fluidState);
+		if (entity.waterloggable())
+			return Waterloggable.super.tryFillWithFluid(world, pos, state, fluidState);
 		return false;
 	}
 }
