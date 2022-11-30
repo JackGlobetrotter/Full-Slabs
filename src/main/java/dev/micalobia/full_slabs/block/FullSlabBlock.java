@@ -67,11 +67,14 @@ public class FullSlabBlock extends Block implements BlockEntityProvider {
 	@Override
 	public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
 		FullSlabBlockEntity entity = (FullSlabBlockEntity) world.getBlockEntity(pos);
-		if(entity == null) return ItemStack.EMPTY;
+		if (entity == null)
+			return ItemStack.EMPTY;
 		HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
 		BlockState pickState;
-		if(hitResult == null || hitResult.getType() != Type.BLOCK) pickState = entity.getPositiveSlabState();
-		else pickState = entity.getSlabState(hitResult.getPos());
+		if (hitResult == null || hitResult.getType() != Type.BLOCK)
+			pickState = entity.getPositiveSlabState();
+		else
+			pickState = entity.getSlabState(hitResult.getPos());
 		return pickState.getBlock().getPickStack(world, pos, pickState);
 	}
 
