@@ -6,24 +6,27 @@ import dev.micalobia.full_slabs.block.FullSlabBlock;
 import dev.micalobia.full_slabs.block.entity.ExtraSlabBlockEntity;
 import dev.micalobia.full_slabs.block.entity.FullSlabBlockEntity;
 import dev.micalobia.full_slabs.config.ModConfig;
-import dev.micalobia.micalibria.block.BlockUtility;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.AbstractBlock.Settings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction.Axis;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import virtuoel.statement.api.StateRefresher;
 
 import java.util.Set;
 
@@ -48,14 +51,28 @@ public class FullSlabsMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		FULL_SLAB_BLOCK = Registry.register(Registry.BLOCK, id("full_slab_block"), new FullSlabBlock(Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(FullSlabBlock::stateToLuminance)));
-		FULL_SLAB_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, id("full_slab"), FabricBlockEntityTypeBuilder.create(FullSlabBlockEntity::new, FULL_SLAB_BLOCK).build());
+		FULL_SLAB_BLOCK = Registry.register(Registries.BLOCK, id("full_slab_block"), new FullSlabBlock(Settings.copy(Blocks.BEDROCK).nonOpaque().luminance(FullSlabBlock::stateToLuminance)));
+		FULL_SLAB_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, id("full_slab"), FabricBlockEntityTypeBuilder.create(FullSlabBlockEntity::new, FULL_SLAB_BLOCK).build());
 
-		EXTRA_SLAB_BLOCK = Registry.register(Registry.BLOCK, id("extra_slab_block"), new ExtraSlabBlock(Settings.copy(Blocks.BEDROCK).luminance(ExtraSlabBlock::stateToLuminance)));
-		EXTRA_SLAB_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, id("extra_slab"), FabricBlockEntityTypeBuilder.create(ExtraSlabBlockEntity::new, EXTRA_SLAB_BLOCK).build());
+		EXTRA_SLAB_BLOCK = Registry.register(Registries.BLOCK, id("extra_slab_block"), new ExtraSlabBlock(Settings.copy(Blocks.BEDROCK).luminance(ExtraSlabBlock::stateToLuminance)));
+		EXTRA_SLAB_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, id("extra_slab"), FabricBlockEntityTypeBuilder.create(ExtraSlabBlockEntity::new, EXTRA_SLAB_BLOCK).build());
 		AutoConfig.register(ModConfig.class, FullSlabsMod::createConfigSerializer);
 		TILTED_SLABS = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getTiltableSlabs();
 
-		BlockUtility.injectBlockstateProperty(SlabBlock.class, Properties.AXIS, Axis.Y);
+		injectBlockstateProperty(SlabBlock.class, Properties.AXIS, Axis.Y);
 	}
+
+	private static <B extends Block, P extends Comparable<P>> void injectBlockstateProperty(Class<B> class1, Property<P> property, P defaultValue) {
+		Registries.BLOCK.forEach(block -> {
+			if(class1.isAssignableFrom(block.getClass()))
+				StateRefresher.INSTANCE.addBlockProperty(block, property, defaultValue);
+		});
+		RegistryEntryAddedCallback.event(Registries.BLOCK).register((rawId, id, block) -> {
+			if(class1.isAssignableFrom(block.getClass()))
+				StateRefresher.INSTANCE.addBlockProperty(block, property, defaultValue);
+		});
+		StateRefresher.INSTANCE.reorderBlockStates();
+	}
+
+	
 }

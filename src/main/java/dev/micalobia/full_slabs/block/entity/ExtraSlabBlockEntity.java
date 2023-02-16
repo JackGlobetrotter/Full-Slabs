@@ -5,14 +5,13 @@ import dev.micalobia.full_slabs.block.ExtraSlabBlock;
 import dev.micalobia.full_slabs.block.SlabBlockUtility;
 import dev.micalobia.full_slabs.config.ModConfig;
 import dev.micalobia.full_slabs.config.SlabExtra;
-import dev.micalobia.full_slabs.mixin.item.WallStandingBlockItemAccessor;
+import dev.micalobia.full_slabs.mixin.item.VerticallyAttachableBlockItemAccessor;
 import dev.micalobia.full_slabs.util.Utility;
-import dev.micalobia.micalibria.block.entity.MBlockEntity;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.WallStandingBlockItem;
+import net.minecraft.item.VerticallyAttachableBlockItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
@@ -27,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
-public class ExtraSlabBlockEntity extends MBlockEntity {
+public class ExtraSlabBlockEntity extends BaseBlockEntity {
 	public static final Map<Identifier, SlabExtra> allowedExtras;
 
 	static {
@@ -40,8 +39,8 @@ public class ExtraSlabBlockEntity extends MBlockEntity {
 	public ExtraSlabBlockEntity(BlockPos pos, BlockState state, Block base, BlockItem item) {
 		super(FullSlabsMod.EXTRA_SLAB_BLOCK_ENTITY, pos, state);
 		Block extraBlock;
-		if(state.get(ExtraSlabBlock.AXIS).isHorizontal() && item instanceof WallStandingBlockItem wallItem)
-			extraBlock = ((WallStandingBlockItemAccessor) wallItem).getWallBlock();
+		if(state.get(ExtraSlabBlock.AXIS).isHorizontal() && item instanceof VerticallyAttachableBlockItem wallItem)
+			extraBlock = ((VerticallyAttachableBlockItemAccessor) wallItem).wallBlock();
 		else
 			extraBlock = item.getBlock();
 		if(allowed(extraBlock)) this.extra = allowedExtras.get(Utility.getBlockId(extraBlock));
@@ -94,8 +93,8 @@ public class ExtraSlabBlockEntity extends MBlockEntity {
 	}
 
 	public static @Nullable SlabExtra get(Axis axis, BlockItem item) {
-		if(axis.isHorizontal() && item instanceof WallStandingBlockItem wallItem)
-			return get(((WallStandingBlockItemAccessor) wallItem).getWallBlock());
+		if(axis.isHorizontal() && item instanceof VerticallyAttachableBlockItem wallItem)
+			return get(((VerticallyAttachableBlockItemAccessor) wallItem).wallBlock());
 		return get(item.getBlock());
 	}
 

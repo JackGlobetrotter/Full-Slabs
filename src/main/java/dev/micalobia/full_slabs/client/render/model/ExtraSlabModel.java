@@ -5,12 +5,16 @@ import dev.micalobia.full_slabs.block.SlabBlockUtility;
 import dev.micalobia.full_slabs.block.entity.ExtraSlabBlockEntity;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 import net.minecraft.world.BlockRenderView;
 
 import net.minecraft.util.math.random.Random;
+
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ExtraSlabModel extends BasicModel {
@@ -25,11 +29,11 @@ public class ExtraSlabModel extends BasicModel {
 		emitModel(view, baseState, pos, randomSupplier, context);
 		if(extraState != null) {
 			// This section just translates the extra model half a block
-			Vec3f unit = direction.getOpposite().getUnitVector();
-			unit.scale(0.5f); // Half normal of inner slab face
+			Vector3f unit = direction.getOpposite().getUnitVector();
+			unit.normalize(0.5f); // Half normal of inner slab face
 			context.pushTransform((quad) -> {
 				for(int i = 0; i < 4; ++i) {
-					Vec3f vec = quad.copyPos(i, null);
+					Vector3f vec = quad.copyPos(i, null);
 					vec.add(unit);
 					quad.pos(i, vec);
 				}
@@ -38,6 +42,12 @@ public class ExtraSlabModel extends BasicModel {
 			emitModel(view, extraState, pos, randomSupplier, context);
 			context.popTransform();
 		}
+	}
+
+	@Override
+	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

@@ -16,9 +16,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 
 public class RenderUtility {
 	// All code below is ported and modified from Malilib RenderUtils/PositionUtils
@@ -37,7 +38,7 @@ public class RenderUtility {
 		globalStack.push();
 		blockTargetingOverlayTranslations(x, y, z, side, playerFacing, globalStack);
 		RenderSystem.applyModelViewMatrix();
-		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 		RenderSystem.disableTexture();
 
 		Tessellator tessellator = Tessellator.getInstance();
@@ -90,7 +91,7 @@ public class RenderUtility {
 		blockTargetingOverlayTranslations(x, y, z, side, playerFacing, globalStack);
 		RenderSystem.applyModelViewMatrix();
 
-		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 		RenderSystem.disableTexture();
 
 		Tessellator tessellator = Tessellator.getInstance();
@@ -134,23 +135,23 @@ public class RenderUtility {
 
 		switch(side) {
 			case DOWN:
-				matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - playerFacing.asRotation()));
-				matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f));
+				matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - playerFacing.asRotation()));
+				matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f));
 				break;
 			case UP:
-				matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - playerFacing.asRotation()));
-				matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90f));
+				matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - playerFacing.asRotation()));
+				matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
 				break;
 			case NORTH:
-				matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
+				matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
 				break;
 			case SOUTH:
 				break;
 			case WEST:
-				matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90f));
+				matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90f));
 				break;
 			case EAST:
-				matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90f));
+				matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90f));
 				break;
 		}
 

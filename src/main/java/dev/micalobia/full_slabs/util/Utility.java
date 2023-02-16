@@ -4,6 +4,7 @@ import dev.micalobia.full_slabs.util.malilib.HitPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
@@ -12,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Direction.AxisDirection;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -23,11 +23,11 @@ public class Utility {
 	}
 
 	public static Identifier getBlockId(Block block) {
-		return Registry.BLOCK.getId(block);
+		return Registries.BLOCK.getId(block);
 	}
 
 	public static Block getBlock(Identifier id) {
-		return Registry.BLOCK.get(id);
+		return Registries.BLOCK.get(id);
 	}
 
 	public static BlockState getStateFromString(Block block, @Nullable String string) {

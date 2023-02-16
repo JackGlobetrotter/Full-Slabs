@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '1.1-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -21,16 +21,21 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+		url = "https://jitpack.io"
+	}
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modApi("com.github.Virtuoel:Statement:${project.statement_version}", {
+	    exclude group: "net.fabricmc.fabric-api"
+    })
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.malilib_mc_version}:${project.malilib_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}"
-    include modImplementation("com.github.Micalobia:Micalibria:v${project.micalibria_version}")
 }
 
 processResources {

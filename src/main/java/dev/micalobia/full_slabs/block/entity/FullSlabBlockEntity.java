@@ -2,21 +2,20 @@ package dev.micalobia.full_slabs.block.entity;
 
 import dev.micalobia.full_slabs.FullSlabsMod;
 import dev.micalobia.full_slabs.block.SlabBlockUtility;
-import dev.micalobia.micalibria.block.entity.MBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
-public class FullSlabBlockEntity extends MBlockEntity {
+public class FullSlabBlockEntity extends BaseBlockEntity {
 	private Block positiveSlab;
 	private Block negativeSlab;
 
@@ -60,28 +59,28 @@ public class FullSlabBlockEntity extends MBlockEntity {
 
 	@Override
 	public void writeToNbt(NbtCompound nbt) {
-		nbt.putString("positive_id", Registry.BLOCK.getId(positiveSlab).toString());
-		nbt.putString("negative_id", Registry.BLOCK.getId(negativeSlab).toString());
+		nbt.putString("positive_id", Registries.BLOCK.getId(positiveSlab).toString());
+		nbt.putString("negative_id", Registries.BLOCK.getId(negativeSlab).toString());
 	}
 
 	@Override
 	public void readFromNbt(NbtCompound nbt) {
-		positiveSlab = Registry.BLOCK.get(new Identifier(nbt.getString("positive_id")));
-		negativeSlab = Registry.BLOCK.get(new Identifier(nbt.getString("negative_id")));
+		positiveSlab = Registries.BLOCK.get(new Identifier(nbt.getString("positive_id")));
+		negativeSlab = Registries.BLOCK.get(new Identifier(nbt.getString("negative_id")));
 		if(!(positiveSlab instanceof SlabBlock)) positiveSlab = Blocks.STONE_SLAB;
 		if(!(negativeSlab instanceof SlabBlock)) negativeSlab = Blocks.STONE_SLAB;
 	}
 
 	@Override
 	public void writeToClientNbt(NbtCompound nbt) {
-		nbt.putString("positive_id", Registry.BLOCK.getId(positiveSlab).toString());
-		nbt.putString("negative_id", Registry.BLOCK.getId(negativeSlab).toString());
+		nbt.putString("positive_id", Registries.BLOCK.getId(positiveSlab).toString());
+		nbt.putString("negative_id", Registries.BLOCK.getId(negativeSlab).toString());
 	}
 
 	@Override
 	public void readFromClientNbt(NbtCompound nbt) {
-		positiveSlab = Registry.BLOCK.get(new Identifier(nbt.getString("positive_id")));
-		negativeSlab = Registry.BLOCK.get(new Identifier(nbt.getString("negative_id")));
+		positiveSlab = Registries.BLOCK.get(new Identifier(nbt.getString("positive_id")));
+		negativeSlab = Registries.BLOCK.get(new Identifier(nbt.getString("negative_id")));
 		if(!(positiveSlab instanceof SlabBlock)) positiveSlab = Blocks.STONE_SLAB;
 		if(!(negativeSlab instanceof SlabBlock)) negativeSlab = Blocks.STONE_SLAB;
 	}

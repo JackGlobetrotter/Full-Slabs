@@ -100,14 +100,14 @@ public abstract class BasicModel implements UnbakedModel, BakedModel, FabricBake
 		return Collections.emptySet();
 	}
 
-	@Override
+	/*@Override  ----- has been removed in 22w42a
 	public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences) {
 		return Collections.emptySet();
-	}
-
+	}*/
+	
 	@Nullable
 	@Override
-	public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+	public BakedModel bake(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
 		missingParticle = textureGetter.apply(MISSINGNO_ID);
 		return this;
 	}

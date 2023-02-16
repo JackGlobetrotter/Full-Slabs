@@ -12,9 +12,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult.Type;
-import net.minecraft.util.math.Matrix4f;
 
 import java.util.Objects;
+
+import org.joml.Matrix4f;
 
 public class OverlayRenderer implements IRenderer {
 	public static void init() {

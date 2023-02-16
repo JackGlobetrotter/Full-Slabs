@@ -9,8 +9,8 @@
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
     "item.BlockItemMixin",
-    "item.WallStandingBlockItemAccessor",
-    "item.WallStandingBlockItemMixin",
+    "item.VerticallyAttachableBlockItemAccessor",
+    "item.VerticallyAttachableBlockItemMixin",
     "server.network.ServerPlayerInteractionManagerMixin",
     "world.WorldChunkMixin"
   ],
