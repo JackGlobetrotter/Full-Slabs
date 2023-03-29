@@ -62,8 +62,6 @@ public class FullSlabsMod implements ModInitializer {
 		injectBlockstateProperty(SlabBlock.class, Properties.AXIS, Axis.Y);
 	}
 
-
-	// TODO: Replace statement later-on? 
 	private static <B extends Block, P extends Comparable<P>> void injectBlockstateProperty(Class<B> class1, Property<P> property, P defaultValue) {
 		Registries.BLOCK.forEach(block -> {
 			if(class1.isAssignableFrom(block.getClass()))
@@ -75,6 +73,5 @@ public class FullSlabsMod implements ModInitializer {
 		});
 		StateRefresher.INSTANCE.reorderBlockStates();
 	}
-
 	
 }
