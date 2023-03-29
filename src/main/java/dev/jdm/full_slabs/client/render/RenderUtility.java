@@ -38,7 +38,7 @@ public class RenderUtility {
 		blockTargetingOverlayTranslations(x, y, z, side, playerFacing, globalStack);
 		RenderSystem.applyModelViewMatrix();
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-		RenderSystem.disableTexture();
+		//RenderSystem.disableTexture();
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -91,7 +91,7 @@ public class RenderUtility {
 		RenderSystem.applyModelViewMatrix();
 
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-		RenderSystem.disableTexture();
+		//RenderSystem.disableTexture();
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();

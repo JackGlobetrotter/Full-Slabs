@@ -45,7 +45,7 @@ public class OverlayRenderer implements IRenderer {
 
 			RenderSystem.depthMask(false);
 			RenderSystem.disableCull();
-			RenderSystem.disableTexture();
+			//RenderSystem.disableTexture();
 			RenderSystem.disableDepthTest();
 
 			RenderUtils.setupBlend();
@@ -60,7 +60,7 @@ public class OverlayRenderer implements IRenderer {
 						entity, hitResult.getBlockPos(), hitResult.getSide(), hitResult.getPos(), state, mc
 				);
 
-			RenderSystem.enableTexture();
+			//RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
 			RenderSystem.disableBlend();
 			RenderSystem.enableCull();

@@ -33,7 +33,7 @@ public abstract class EntityMixin {
 		if(!state.isOf(FullSlabsMod.FULL_SLAB_BLOCK) && !state.isOf(FullSlabsMod.EXTRA_SLAB_BLOCK))
 			return particleEffect;
 		Vec3d hit = getPos().subtract(0d, 0.2d, 0d);
-		BlockPos pos = new BlockPos(hit);
+		BlockPos pos = BlockPos.ofFloored(hit);
 		BlockEntity entity = world.getBlockEntity(pos);
 		BlockState particleState;
 		if(entity instanceof FullSlabBlockEntity fullEntity)

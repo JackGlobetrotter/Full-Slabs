@@ -84,7 +84,7 @@ public abstract class SlabBlockMixin extends Block implements Waterloggable {
 			PlayerEntity player = ctx.getPlayer();
 			if(player != null && !CustomControls.getVerticalEnabled(player.getUuid())) return;
 			Direction hitSide = ctx.getSide();
-			Direction facing = ctx.getPlayerFacing();
+			Direction facing = ctx.getHorizontalPlayerFacing();
 			HitPart part = Utility.getHitPart(hitSide, facing, pos, ctx.getHitPos());
 			Direction slabDir = Utility.getTargetedDirection(hitSide, facing, pos, ctx.getHitPos());
 			if(part == HitPart.CENTER) slabDir = slabDir.getOpposite();
