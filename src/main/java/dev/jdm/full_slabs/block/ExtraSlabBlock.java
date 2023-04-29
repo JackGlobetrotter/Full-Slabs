@@ -68,7 +68,7 @@ public class ExtraSlabBlock extends Block implements BlockEntityProvider, Waterl
 			WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED))
 			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-		return state.getStateForNeighborUpdate(direction,neighborState, world, pos, neighborPos);// super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos); //state.getStateForNeighborUpdate(direction,neighborState, world, pos, neighborPos);// super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Override

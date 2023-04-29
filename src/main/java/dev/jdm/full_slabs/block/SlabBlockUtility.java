@@ -87,7 +87,7 @@ public class SlabBlockUtility {
 	}
 
 	public static boolean tilted(Identifier id) {
-		return FullSlabsMod.TILTED_SLABS.contains(id);
+		return FullSlabsMod.TILTED_SLABS.contains(id) || (id.getNamespace().contains("minecraft") &&id.getPath().contains("slab")) ;
 	}
 
 	public static Direction getDirection(Axis axis, Vec3d hit, BlockPos pos) {
