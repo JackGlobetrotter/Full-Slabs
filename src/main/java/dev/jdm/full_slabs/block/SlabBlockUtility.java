@@ -87,7 +87,7 @@ public class SlabBlockUtility {
 	}
 
 	public static boolean tilted(Identifier id) {
-		return FullSlabsMod.TILTED_SLABS.contains(id) || (id.getNamespace().contains("minecraft") &&id.getPath().contains("slab")) ;
+		return FullSlabsMod.TILTED_SLABS.contains(id) || (/*FullSlabsMod.SODIUM_COMPATIBILITY &&*/ (id.getNamespace().contains("minecraft") &&id.getPath().contains("slab")) ); //TODO: only use if Indium is loaded!!
 	}
 
 	public static Direction getDirection(Axis axis, Vec3d hit, BlockPos pos) {

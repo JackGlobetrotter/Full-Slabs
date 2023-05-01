@@ -12,7 +12,10 @@
     "item.VerticallyAttachableBlockItemAccessor",
     "item.VerticallyAttachableBlockItemMixin",
     "server.network.ServerPlayerInteractionManagerMixin",
-    "world.WorldChunkMixin"
+    "world.WorldChunkMixin",
+    "block.StainedGlassSlabBlockMixin",
+    "block.GlassSlabBlockMixin",
+    "block.TintedGlassSlabBlockMixin"
   ],
   "client": [
     "client.ModelLoaderMixin",
@@ -23,5 +26,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "dev.jdm.full_slabs.FullSlabMixinPlugin"
 }

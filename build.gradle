@@ -40,6 +40,8 @@ dependencies {
     modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.malilib_mc_version}:${project.malilib_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}"
+
+    modCompileOnly "curse.maven:moglass-353426:${rootProject.property("moglass")}-deobf-sources"
 }
 
 processResources {

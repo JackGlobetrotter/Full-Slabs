@@ -18,6 +18,6 @@ public class FullSlabsModClient implements ClientModInitializer {
 			OverlayRenderer.init();
 		CustomControls.clientInit();
 
-		SodiumCompatibility.load();
+		FullSlabsMod.SODIUM_COMPATIBILITY = SodiumCompatibility.load();
 	}
 }

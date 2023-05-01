@@ -41,6 +41,8 @@ public class FullSlabsMod implements ModInitializer {
 	public static Block EXTRA_SLAB_BLOCK;
 	public static Set<Identifier> TILTED_SLABS;
 
+	public static boolean SODIUM_COMPATIBILITY;
+
 	public static Identifier id(String path) {
 		return new Identifier(MOD_ID, path);
 	}
