@@ -1,18 +1,21 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.micalobia.full_slabs.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "package": "dev.jdm.full_slabs.mixin",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "block.SlabBlockAccessor",
     "block.SlabBlockMixin",
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
     "item.BlockItemMixin",
-    "item.WallStandingBlockItemAccessor",
-    "item.WallStandingBlockItemMixin",
+    "item.VerticallyAttachableBlockItemAccessor",
+    "item.VerticallyAttachableBlockItemMixin",
     "server.network.ServerPlayerInteractionManagerMixin",
-    "world.WorldChunkMixin"
+    "world.WorldChunkMixin",
+    "block.StainedGlassSlabBlockMixin",
+    "block.GlassSlabBlockMixin",
+    "block.TintedGlassSlabBlockMixin"
   ],
   "client": [
     "client.ModelLoaderMixin",
@@ -23,5 +26,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "dev.jdm.full_slabs.FullSlabMixinPlugin"
 }
