@@ -1,0 +1,83 @@
+name: Crash Report
+description: Game crashed? Report it here!
+title: "[X.XX.XX][Crash]: "
+labels: [ "Bug", "Major" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Prior to filling out this bug report please try the following:**
+        * Reset your configs! Outdated configs can cause crashes, delete the `config/full_slabs.json` file.
+        * Isolate this mod on its own and attempt to reproduce the crash with ONLY this mod and its dependencies. If it works on its own, this is likely a mod incompatibility. Please make sure to mention whether or not this is a mod incompatibility in your report!
+
+        **TITLE THIS ISSUE PROPERLY**
+  - type: input
+    id: mod-version
+    attributes:
+      label: Full-Slabs Version
+      description: |
+        What version of the mod are you using? Please make sure you are using the latest version available!
+      placeholder: ex. 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: minecraft-version
+    attributes:
+      label: Minecraft Version
+      description: |
+        What version of Minecraft are you using?
+      placeholder: ex. 1.19.4
+    validations:
+      required: true
+  - type: input
+    id: fabric-loader-version
+    attributes:
+      label: Fabric Loader Version
+      description: |
+        What version of Fabric Loader are you using?
+      placeholder: ex. 0.14.10
+    validations:
+      required: true
+  - type: input
+    id: fabric-api-version
+    attributes:
+      label: Fabric API Version
+      description: What version of the Fabric API are you using?
+      placeholder: ex. 0.85.0
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Please give a thorough explanation of the issue(s) you found. Attach/Link relevant images/files in relation to the issue(s)!
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: crash-log
+    attributes:
+      label: crash-log
+      description: Please upload your crash log file directly here or use https://gist.github.com/ and leave the link here.
+      placeholder: Drag and drop crash log file here or link it with https://gist.github.com/!
+    validations:
+      required: true
+  - type: textarea
+    id: latest-log
+    attributes:
+      label: latest.log
+      description: Please upload your latest.log file directly here or use https://gist.github.com/ and leave the link here.
+      placeholder: Drag and drop latest.log file here or link it with https://gist.github.com/!
+    validations:
+      required: true
+  - type: dropdown
+    id: isolate-mod
+    attributes:
+      label: Did you isolate Full-Slabs?
+      description: |
+        Did you try a separate instance with Full-Slabs and its required dependencies only?? **If not please do so now!**
+      options:
+        - I tried Full-Slabs alone
+        - I did not try Full-Slabs alone
+    validations:
+      required: true
