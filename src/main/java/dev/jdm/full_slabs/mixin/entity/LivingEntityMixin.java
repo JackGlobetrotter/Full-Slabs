@@ -33,7 +33,7 @@ public class LivingEntityMixin implements MixinSelf<LivingEntity> {
 		ParticleType<BlockStateParticleEffect> type = effect.getType();
 		if(!state.isOf(FullSlabsMod.FULL_SLAB_BLOCK) && !state.isOf(FullSlabsMod.EXTRA_SLAB_BLOCK))
 			return particleEffect;
-		BlockEntity entity = self().world.getBlockEntity(_landedPosition);
+		BlockEntity entity = self().getWorld().getBlockEntity(_landedPosition);
 		BlockState landState;
 		if(entity instanceof FullSlabBlockEntity fullEntity)
 			landState = fullEntity.getSlabState(self().getPos());
