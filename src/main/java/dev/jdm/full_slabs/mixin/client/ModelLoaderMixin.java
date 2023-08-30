@@ -7,7 +7,7 @@ import dev.jdm.full_slabs.FullSlabsMod;
 import dev.jdm.full_slabs.block.SlabBlockUtility;
 import dev.jdm.full_slabs.mixin.client.render.model.json.JsonUnbakedModelAccessor;
 import dev.jdm.full_slabs.util.MixinSelf;
-import net.fabricmc.fabric.impl.client.model.ModelLoaderHooks;
+import net.fabricmc.fabric.impl.client.model.loading.ModelLoaderHooks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.client.render.model.ModelLoader;
@@ -157,7 +157,7 @@ public abstract class ModelLoaderMixin implements MixinSelf<ModelLoader> {
 				needToCreate = new HashMap<>();
 				boolean tilted = SlabBlockUtility.tilted(pure);
 				JsonUnbakedModel creationModel = fetchJsonModel(getVariantLocation(list.get(0).getSecond(), "type=bottom"));
-				creationFaces = getDirectionalFaces(creationModel, ((ModelLoaderHooks) self())::fabric_loadModel);
+				creationFaces = getDirectionalFaces(creationModel, ((ModelLoaderHooks) self())::fabric_getOrLoadModel);
 				for(int i = 0; i < list.size(); ++i) {
 					Pair<String, ModelVariantMap> pair = list.get(i);
 					ModelVariantMap map = pair.getSecond();
