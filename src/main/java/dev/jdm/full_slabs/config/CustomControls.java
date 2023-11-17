@@ -44,6 +44,9 @@ public class CustomControls {
 	}
 
 	public static void toggleVerticalEnabled(UUID player) {
+		if(verticalEnabledMap.isEmpty()){ //check if empty when pressed before selecting slab
+			getVerticalEnabled(player);
+		}
 		verticalEnabledMap.put(player, !verticalEnabledMap.get(player));
 	}
 
