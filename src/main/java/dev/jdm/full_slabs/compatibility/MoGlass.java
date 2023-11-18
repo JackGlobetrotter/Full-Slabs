@@ -22,10 +22,10 @@ public class MoGlass {
         SlabType type1 = blockState_1.get(SlabBlock.TYPE);
         SlabType type2 = blockState_1.get(SlabBlock.TYPE);
 
+        if(type1 == SlabType.DOUBLE || type2 == SlabType.DOUBLE ) return false; //TODO: Work on more specific conditions
         if(type1 == type2  && axis1 == axis2 && axis1 != Direction.Axis.Y)
             return true;
-        else if((axis1 != Direction.Axis.Y || axis2 != Direction.Axis.Y) && (axis2 != axis1)  )
-            return true;
+
         return false;
     }
 }
